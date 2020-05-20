@@ -54,8 +54,9 @@ endif()
 add_library(QGLViewer SHARED IMPORTED)
 
 set_target_properties(QGLViewer PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "/usr/lib/x86_64-linux-gnu/libGL.so;/usr/lib/x86_64-linux-gnu/libGLU.so;Qt5::Core;Qt5::Widgets;Qt5::OpenGL;Qt5::Xml"
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/extlibs/QGLViewer"
+  INTERFACE_LINK_LIBRARIES "Qt5::Core;Qt5::Gui;Qt5::Xml;Qt5::OpenGL;Qt5::Widgets;OpenGL::GL;OpenGL::GLU"
+  INTERFACE_SYSTEM_INCLUDE_DIRECTORIES "include/extlibs/QGLViewer"
 )
 
 if(CMAKE_VERSION VERSION_LESS 2.8.12)

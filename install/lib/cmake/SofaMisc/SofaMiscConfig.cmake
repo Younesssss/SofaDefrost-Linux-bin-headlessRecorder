@@ -25,11 +25,28 @@ endmacro()
 
 ####################################################################################
 
-find_package(SofaAdvanced REQUIRED)
+set(SOFAMISC_TARGETS SofaMiscExtra;SofaMiscEngine;SofaMiscFem;SofaMiscForceField;SofaMiscMapping;SofaMiscSolver;SofaMiscTopology)
+
+set(SOFAMISCTOPOLOGY_HAVE_ZLIB 1)
+set(SOFAMISCFEM_HAVE_NEWMAT 1)
+
 find_package(SofaGeneral REQUIRED)
 
-if(NOT TARGET SofaComponentMisc)
-	include("${CMAKE_CURRENT_LIST_DIR}/SofaMiscTargets.cmake")
+# Required by SofaMiscEngine
+find_package(SofaNonUniformFem REQUIRED)
+
+if(SOFAMISCTOPOLOGY_HAVE_ZLIB)
+    find_package(ZLIB QUIET REQUIRED)
+endif()
+if(SOFAMISCFEM_HAVE_NEWMAT)
+    find_package(Newmat QUIET REQUIRED)
 endif()
 
-check_required_components(SofaComponentMisc;SofaMisc;SofaMiscEngine;SofaMiscFem;SofaMiscForceField;SofaMiscMapping;SofaMiscSolver;SofaMiscTopology)
+foreach(target ${SOFAMISC_TARGETS})
+    if(NOT TARGET ${target})
+        include("${CMAKE_CURRENT_LIST_DIR}/SofaMiscTargets.cmake")
+        break()
+    endif()
+endforeach()
+
+check_required_components(${SOFAMISC_TARGETS})

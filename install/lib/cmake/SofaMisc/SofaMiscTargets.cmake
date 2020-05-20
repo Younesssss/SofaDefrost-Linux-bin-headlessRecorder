@@ -16,7 +16,7 @@ set(CMAKE_IMPORT_FILE_VERSION 1)
 set(_targetsDefined)
 set(_targetsNotDefined)
 set(_expectedTargets)
-foreach(_expectedTarget SofaComponentMisc SofaMisc SofaMiscEngine SofaMiscFem SofaMiscForceField SofaMiscMapping SofaMiscSolver SofaMiscTopology)
+foreach(_expectedTarget SofaMiscExtra SofaMiscEngine SofaMiscFem SofaMiscForceField SofaMiscMapping SofaMiscSolver SofaMiscTopology SofaMisc)
   list(APPEND _expectedTargets ${_expectedTarget})
   if(NOT TARGET ${_expectedTarget})
     list(APPEND _targetsNotDefined ${_expectedTarget})
@@ -50,17 +50,11 @@ if(_IMPORT_PREFIX STREQUAL "/")
   set(_IMPORT_PREFIX "")
 endif()
 
-# Create imported target SofaComponentMisc
-add_library(SofaComponentMisc SHARED IMPORTED)
+# Create imported target SofaMiscExtra
+add_library(SofaMiscExtra SHARED IMPORTED)
 
-set_target_properties(SofaComponentMisc PROPERTIES
-  INTERFACE_LINK_LIBRARIES "SofaMisc;SofaMiscEngine;SofaMiscFem;SofaMiscForceField;SofaMiscMapping;SofaMiscSolver;SofaMiscTopology"
-)
-
-# Create imported target SofaMisc
-add_library(SofaMisc SHARED IMPORTED)
-
-set_target_properties(SofaMisc PROPERTIES
+set_target_properties(SofaMiscExtra PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaMisc"
   INTERFACE_LINK_LIBRARIES "SofaGeneralMeshCollision;SofaMiscTopology;SofaTopologyMapping"
 )
 
@@ -68,6 +62,7 @@ set_target_properties(SofaMisc PROPERTIES
 add_library(SofaMiscEngine SHARED IMPORTED)
 
 set_target_properties(SofaMiscEngine PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaMisc"
   INTERFACE_LINK_LIBRARIES "SofaNonUniformFem"
 )
 
@@ -75,13 +70,15 @@ set_target_properties(SofaMiscEngine PROPERTIES
 add_library(SofaMiscFem SHARED IMPORTED)
 
 set_target_properties(SofaMiscFem PROPERTIES
-  INTERFACE_LINK_LIBRARIES "SofaSimpleFem;SofaOpenglVisual;newmat"
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaMisc"
+  INTERFACE_LINK_LIBRARIES "SofaSimpleFem;newmat"
 )
 
 # Create imported target SofaMiscForceField
 add_library(SofaMiscForceField SHARED IMPORTED)
 
 set_target_properties(SofaMiscForceField PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaMisc"
   INTERFACE_LINK_LIBRARIES "SofaHelper;SofaDeformable;SofaBoundaryCondition;SofaMiscTopology;SofaGeneralTopology"
 )
 
@@ -89,6 +86,7 @@ set_target_properties(SofaMiscForceField PROPERTIES
 add_library(SofaMiscMapping SHARED IMPORTED)
 
 set_target_properties(SofaMiscMapping PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaMisc"
   INTERFACE_LINK_LIBRARIES "SofaSimpleFem;SofaRigid"
 )
 
@@ -96,6 +94,7 @@ set_target_properties(SofaMiscMapping PROPERTIES
 add_library(SofaMiscSolver SHARED IMPORTED)
 
 set_target_properties(SofaMiscSolver PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaMisc"
   INTERFACE_LINK_LIBRARIES "SofaSimulationTree"
 )
 
@@ -103,7 +102,16 @@ set_target_properties(SofaMiscSolver PROPERTIES
 add_library(SofaMiscTopology SHARED IMPORTED)
 
 set_target_properties(SofaMiscTopology PROPERTIES
-  INTERFACE_LINK_LIBRARIES "SofaBaseTopology"
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaMisc"
+  INTERFACE_LINK_LIBRARIES "SofaBaseTopology;ZLIB::ZLIB"
+)
+
+# Create imported target SofaMisc
+add_library(SofaMisc SHARED IMPORTED)
+
+set_target_properties(SofaMisc PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaMisc"
+  INTERFACE_LINK_LIBRARIES "SofaMiscExtra;SofaMiscEngine;SofaMiscFem;SofaMiscForceField;SofaMiscMapping;SofaMiscSolver;SofaMiscTopology"
 )
 
 if(CMAKE_VERSION VERSION_LESS 2.8.12)
@@ -142,7 +150,7 @@ unset(_IMPORT_CHECK_TARGETS)
 # Make sure the targets which have been exported in some other 
 # export set exist.
 unset(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE_targets)
-foreach(_target "SofaGeneralMeshCollision" "SofaTopologyMapping" "SofaNonUniformFem" "SofaSimpleFem" "SofaOpenglVisual" "newmat" "SofaHelper" "SofaDeformable" "SofaBoundaryCondition" "SofaGeneralTopology" "SofaRigid" "SofaSimulationTree" "SofaBaseTopology" )
+foreach(_target "SofaGeneralMeshCollision" "SofaTopologyMapping" "SofaNonUniformFem" "SofaSimpleFem" "newmat" "SofaHelper" "SofaDeformable" "SofaBoundaryCondition" "SofaGeneralTopology" "SofaRigid" "SofaSimulationTree" "SofaBaseTopology" )
   if(NOT TARGET "${_target}" )
     set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE_targets "${${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE_targets} ${_target}")
   endif()

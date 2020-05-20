@@ -54,7 +54,7 @@ endif()
 add_library(tinyxml SHARED IMPORTED)
 
 set_target_properties(tinyxml PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/extlibs/TinyXML"
 )
 
 # Load information for each installed configuration.

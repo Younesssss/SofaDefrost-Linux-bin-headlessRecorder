@@ -26,7 +26,11 @@ endmacro()
 
 ####################################################################################
 
-check_required_components(QGLViewer)
+set(QGLVIEWER_HAVE_QT5_CORE 1)
+
+if(QGLVIEWER_HAVE_QT5_CORE)
+    find_package(Qt5 COMPONENTS Core Gui Xml OpenGL Widgets QUIET REQUIRED)
+endif()
 
 if(NOT TARGET QGLViewer)
 	include("${CMAKE_CURRENT_LIST_DIR}/QGLViewerTargets.cmake")
@@ -34,3 +38,5 @@ endif()
 
 set(QGLViewer_LIBRARIES QGLViewer)
 set(QGLViewer_INCLUDE_DIRS )
+
+check_required_components(QGLViewer)

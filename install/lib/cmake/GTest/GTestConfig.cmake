@@ -27,10 +27,7 @@ endmacro()
 ####################################################################################
 
 if(NOT TARGET gtest)
-	include("${CMAKE_CURRENT_LIST_DIR}/GTestTargets.cmake")
+    include("${CMAKE_CURRENT_LIST_DIR}/GTestTargets.cmake")
 endif()
 
 check_required_components(gtest)
-
-set(GTest_LIBRARY gtest)
-set(GTest_INCLUDE_DIRS )

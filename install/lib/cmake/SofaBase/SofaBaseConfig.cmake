@@ -26,10 +26,19 @@ endmacro()
 
 ####################################################################################
 
+set(SOFABASE_TARGETS SofaBaseCollision;SofaBaseLinearSolver;SofaBaseMechanics;SofaBaseTopology;SofaBaseVisual;SofaBaseUtils)
+
+find_package(SofaFramework REQUIRED)
 find_package(SofaSimulation REQUIRED)
 
-if(NOT TARGET SofaComponentBase)
-	include("${CMAKE_CURRENT_LIST_DIR}/SofaBaseTargets.cmake")
-endif()
+# Eigen3 is required by SofaBaseTopology
+find_package(Eigen3 QUIET REQUIRED)
 
-check_required_components(SofaBaseCollision;SofaBaseLinearSolver;SofaBaseMechanics;SofaBaseTopology;SofaBaseVisual;SofaComponentBase)
+foreach(target ${SOFABASE_TARGETS})
+    if(NOT TARGET ${target})
+        include("${CMAKE_CURRENT_LIST_DIR}/SofaBaseTargets.cmake")
+        break()
+    endif()
+endforeach()
+
+check_required_components(${SOFABASE_TARGETS})

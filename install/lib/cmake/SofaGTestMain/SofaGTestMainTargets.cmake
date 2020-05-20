@@ -54,7 +54,7 @@ endif()
 add_library(SofaGTestMain STATIC IMPORTED)
 
 set_target_properties(SofaGTestMain PROPERTIES
-  INTERFACE_LINK_LIBRARIES "SofaHelper;SofaSimulationTree;SofaSimulationGraph"
+  INTERFACE_LINK_LIBRARIES "SofaHelper;SofaSimulationTree;SofaSimulationGraph;gtest"
 )
 
 if(CMAKE_VERSION VERSION_LESS 2.8.12)
@@ -93,7 +93,7 @@ unset(_IMPORT_CHECK_TARGETS)
 # Make sure the targets which have been exported in some other 
 # export set exist.
 unset(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE_targets)
-foreach(_target "SofaHelper" "SofaSimulationTree" "SofaSimulationGraph" )
+foreach(_target "SofaHelper" "SofaSimulationTree" "SofaSimulationGraph" "gtest" )
   if(NOT TARGET "${_target}" )
     set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE_targets "${${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE_targets} ${_target}")
   endif()

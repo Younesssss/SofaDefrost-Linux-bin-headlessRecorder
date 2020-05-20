@@ -16,7 +16,7 @@ set(CMAKE_IMPORT_FILE_VERSION 1)
 set(_targetsDefined)
 set(_targetsNotDefined)
 set(_expectedTargets)
-foreach(_expectedTarget SofaGeneralAnimationLoop SofaGeneralDeformable SofaGeneralExplicitOdeSolver SofaGeneralImplicitOdeSolver SofaGeneralLinearSolver SofaGeneralLoader SofaGeneralMeshCollision SofaGeneralObjectInteraction SofaGeneralRigid SofaGeneralSimpleFem SofaGeneralTopology SofaGeneralVisual SofaBoundaryCondition SofaComponentGeneral SofaConstraint SofaGeneralEngine SofaGraphComponent SofaTopologyMapping SofaUserInteraction SofaValidation SofaDenseSolver SofaOpenglVisual)
+foreach(_expectedTarget SofaGeneralAnimationLoop SofaGeneralDeformable SofaGeneralExplicitOdeSolver SofaGeneralImplicitOdeSolver SofaGeneralLinearSolver SofaGeneralLoader SofaGeneralMeshCollision SofaGeneralObjectInteraction SofaGeneralRigid SofaGeneralSimpleFem SofaGeneralTopology SofaGeneralVisual SofaBoundaryCondition SofaConstraint SofaGeneralEngine SofaGraphComponent SofaTopologyMapping SofaUserInteraction SofaGeneral)
   list(APPEND _expectedTargets ${_expectedTarget})
   if(NOT TARGET ${_expectedTarget})
     list(APPEND _targetsNotDefined ${_expectedTarget})
@@ -54,6 +54,7 @@ endif()
 add_library(SofaGeneralAnimationLoop SHARED IMPORTED)
 
 set_target_properties(SofaGeneralAnimationLoop PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaGeneral"
   INTERFACE_LINK_LIBRARIES "SofaSimulationCommon;SofaBaseLinearSolver"
 )
 
@@ -61,6 +62,7 @@ set_target_properties(SofaGeneralAnimationLoop PROPERTIES
 add_library(SofaGeneralDeformable SHARED IMPORTED)
 
 set_target_properties(SofaGeneralDeformable PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaGeneral"
   INTERFACE_LINK_LIBRARIES "SofaBaseTopology;SofaDeformable"
 )
 
@@ -68,6 +70,7 @@ set_target_properties(SofaGeneralDeformable PROPERTIES
 add_library(SofaGeneralExplicitOdeSolver SHARED IMPORTED)
 
 set_target_properties(SofaGeneralExplicitOdeSolver PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaGeneral"
   INTERFACE_LINK_LIBRARIES "SofaSimulationTree"
 )
 
@@ -75,6 +78,7 @@ set_target_properties(SofaGeneralExplicitOdeSolver PROPERTIES
 add_library(SofaGeneralImplicitOdeSolver SHARED IMPORTED)
 
 set_target_properties(SofaGeneralImplicitOdeSolver PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaGeneral"
   INTERFACE_LINK_LIBRARIES "SofaSimulationTree"
 )
 
@@ -82,6 +86,7 @@ set_target_properties(SofaGeneralImplicitOdeSolver PROPERTIES
 add_library(SofaGeneralLinearSolver SHARED IMPORTED)
 
 set_target_properties(SofaGeneralLinearSolver PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaGeneral"
   INTERFACE_LINK_LIBRARIES "SofaSimulationCommon;SofaBaseLinearSolver"
 )
 
@@ -89,13 +94,15 @@ set_target_properties(SofaGeneralLinearSolver PROPERTIES
 add_library(SofaGeneralLoader SHARED IMPORTED)
 
 set_target_properties(SofaGeneralLoader PROPERTIES
-  INTERFACE_LINK_LIBRARIES "SofaCore;SofaSimulationTree;SofaHelper"
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaGeneral"
+  INTERFACE_LINK_LIBRARIES "SofaCore;SofaSimulationTree;SofaHelper;ZLIB::ZLIB"
 )
 
 # Create imported target SofaGeneralMeshCollision
 add_library(SofaGeneralMeshCollision SHARED IMPORTED)
 
 set_target_properties(SofaGeneralMeshCollision PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaGeneral"
   INTERFACE_LINK_LIBRARIES "SofaObjectInteraction;SofaRigid;SofaBaseCollision;SofaMeshCollision"
 )
 
@@ -103,6 +110,7 @@ set_target_properties(SofaGeneralMeshCollision PROPERTIES
 add_library(SofaGeneralObjectInteraction SHARED IMPORTED)
 
 set_target_properties(SofaGeneralObjectInteraction PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaGeneral"
   INTERFACE_LINK_LIBRARIES "SofaDeformable"
 )
 
@@ -110,6 +118,7 @@ set_target_properties(SofaGeneralObjectInteraction PROPERTIES
 add_library(SofaGeneralRigid SHARED IMPORTED)
 
 set_target_properties(SofaGeneralRigid PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaGeneral"
   INTERFACE_LINK_LIBRARIES "SofaBaseMechanics"
 )
 
@@ -117,6 +126,7 @@ set_target_properties(SofaGeneralRigid PROPERTIES
 add_library(SofaGeneralSimpleFem SHARED IMPORTED)
 
 set_target_properties(SofaGeneralSimpleFem PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaGeneral"
   INTERFACE_LINK_LIBRARIES "SofaBaseTopology;SofaSimpleFem"
 )
 
@@ -124,6 +134,7 @@ set_target_properties(SofaGeneralSimpleFem PROPERTIES
 add_library(SofaGeneralTopology SHARED IMPORTED)
 
 set_target_properties(SofaGeneralTopology PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaGeneral"
   INTERFACE_LINK_LIBRARIES "SofaSimulationCommon;SofaBaseTopology"
 )
 
@@ -131,6 +142,7 @@ set_target_properties(SofaGeneralTopology PROPERTIES
 add_library(SofaGeneralVisual SHARED IMPORTED)
 
 set_target_properties(SofaGeneralVisual PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaGeneral"
   INTERFACE_LINK_LIBRARIES "SofaBaseTopology;SofaBaseVisual"
 )
 
@@ -138,20 +150,15 @@ set_target_properties(SofaGeneralVisual PROPERTIES
 add_library(SofaBoundaryCondition SHARED IMPORTED)
 
 set_target_properties(SofaBoundaryCondition PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaGeneral"
   INTERFACE_LINK_LIBRARIES "SofaBaseTopology;SofaHelper;SofaEigen2Solver"
-)
-
-# Create imported target SofaComponentGeneral
-add_library(SofaComponentGeneral SHARED IMPORTED)
-
-set_target_properties(SofaComponentGeneral PROPERTIES
-  INTERFACE_LINK_LIBRARIES "SofaGeneralAnimationLoop;SofaGeneralDeformable;SofaGeneralExplicitOdeSolver;SofaGeneralImplicitOdeSolver;SofaGeneralLinearSolver;SofaGeneralLoader;SofaGeneralMeshCollision;SofaGeneralObjectInteraction;SofaGeneralRigid;SofaGeneralSimpleFem;SofaGeneralTopology;SofaGeneralVisual;SofaBoundaryCondition;SofaConstraint;SofaGeneralEngine;SofaGraphComponent;SofaTopologyMapping;SofaUserInteraction;SofaValidation;SofaDenseSolver;SofaOpenglVisual"
 )
 
 # Create imported target SofaConstraint
 add_library(SofaConstraint SHARED IMPORTED)
 
 set_target_properties(SofaConstraint PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaGeneral"
   INTERFACE_LINK_LIBRARIES "SofaMeshCollision;SofaSimpleFem;SofaImplicitOdeSolver;SofaUserInteraction;SofaBaseLinearSolver;SofaEigen2Solver"
 )
 
@@ -159,6 +166,7 @@ set_target_properties(SofaConstraint PROPERTIES
 add_library(SofaGeneralEngine SHARED IMPORTED)
 
 set_target_properties(SofaGeneralEngine PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaGeneral"
   INTERFACE_LINK_LIBRARIES "SofaMeshCollision;SofaGeneralMeshCollision"
 )
 
@@ -166,13 +174,15 @@ set_target_properties(SofaGeneralEngine PROPERTIES
 add_library(SofaGraphComponent SHARED IMPORTED)
 
 set_target_properties(SofaGraphComponent PROPERTIES
-  INTERFACE_LINK_LIBRARIES "SofaHelper;SofaSimulationCore;SofaSimulationTree"
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaGeneral"
+  INTERFACE_LINK_LIBRARIES "SofaHelper;SofaSimulationCore;SofaSimulationTree;SofaBaseUtils"
 )
 
 # Create imported target SofaTopologyMapping
 add_library(SofaTopologyMapping SHARED IMPORTED)
 
 set_target_properties(SofaTopologyMapping PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaGeneral"
   INTERFACE_LINK_LIBRARIES "SofaGeneralTopology"
 )
 
@@ -180,28 +190,16 @@ set_target_properties(SofaTopologyMapping PROPERTIES
 add_library(SofaUserInteraction SHARED IMPORTED)
 
 set_target_properties(SofaUserInteraction PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaGeneral"
   INTERFACE_LINK_LIBRARIES "SofaMeshCollision;SofaGeneralMeshCollision;SofaGeneralRigid;SofaGeneralVisual;SofaTopologyMapping;SofaDeformable;SofaBoundaryCondition;SofaGraphComponent;SofaBaseVisual"
 )
 
-# Create imported target SofaValidation
-add_library(SofaValidation SHARED IMPORTED)
+# Create imported target SofaGeneral
+add_library(SofaGeneral SHARED IMPORTED)
 
-set_target_properties(SofaValidation PROPERTIES
-  INTERFACE_LINK_LIBRARIES "SofaBaseCollision;SofaLoader;SofaMeshCollision;SofaGeneralLoader"
-)
-
-# Create imported target SofaDenseSolver
-add_library(SofaDenseSolver SHARED IMPORTED)
-
-set_target_properties(SofaDenseSolver PROPERTIES
-  INTERFACE_LINK_LIBRARIES "SofaBaseLinearSolver;newmat"
-)
-
-# Create imported target SofaOpenglVisual
-add_library(SofaOpenglVisual SHARED IMPORTED)
-
-set_target_properties(SofaOpenglVisual PROPERTIES
-  INTERFACE_LINK_LIBRARIES "SofaBaseVisual;SofaSimulationCommon"
+set_target_properties(SofaGeneral PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaGeneral"
+  INTERFACE_LINK_LIBRARIES "SofaGeneralAnimationLoop;SofaGeneralDeformable;SofaGeneralExplicitOdeSolver;SofaGeneralImplicitOdeSolver;SofaGeneralLinearSolver;SofaGeneralLoader;SofaGeneralMeshCollision;SofaGeneralObjectInteraction;SofaGeneralRigid;SofaGeneralSimpleFem;SofaGeneralTopology;SofaGeneralVisual;SofaBoundaryCondition;SofaConstraint;SofaGeneralEngine;SofaGraphComponent;SofaTopologyMapping;SofaUserInteraction"
 )
 
 if(CMAKE_VERSION VERSION_LESS 2.8.12)
@@ -240,7 +238,7 @@ unset(_IMPORT_CHECK_TARGETS)
 # Make sure the targets which have been exported in some other 
 # export set exist.
 unset(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE_targets)
-foreach(_target "SofaSimulationCommon" "SofaBaseLinearSolver" "SofaBaseTopology" "SofaDeformable" "SofaSimulationTree" "SofaCore" "SofaHelper" "SofaObjectInteraction" "SofaRigid" "SofaBaseCollision" "SofaMeshCollision" "SofaBaseMechanics" "SofaSimpleFem" "SofaBaseVisual" "SofaEigen2Solver" "SofaImplicitOdeSolver" "SofaSimulationCore" "SofaLoader" "newmat" )
+foreach(_target "SofaSimulationCommon" "SofaBaseLinearSolver" "SofaBaseTopology" "SofaDeformable" "SofaSimulationTree" "SofaCore" "SofaHelper" "SofaObjectInteraction" "SofaRigid" "SofaBaseCollision" "SofaMeshCollision" "SofaBaseMechanics" "SofaSimpleFem" "SofaBaseVisual" "SofaEigen2Solver" "SofaImplicitOdeSolver" "SofaSimulationCore" "SofaBaseUtils" )
   if(NOT TARGET "${_target}" )
     set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE_targets "${${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE_targets} ${_target}")
   endif()

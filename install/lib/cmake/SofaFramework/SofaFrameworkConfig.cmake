@@ -26,66 +26,69 @@ endmacro()
 
 ####################################################################################
 
+# CMake policies
+if(POLICY CMP0072)
+    cmake_policy(SET CMP0072 NEW) # Use  GLVND libraries for OpenGL and GLX when available
+endif()
+
+get_filename_component(SOFA_ROOT "${CMAKE_CURRENT_LIST_DIR}/../../.." ABSOLUTE)
+
+# Add CMAKE_CURRENT_LIST_DIR to CMAKE_MODULE_PATH (if not already done)
+# Needed by: include(SofaMacros)
 list(FIND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}" HAS_SOFAFRAMEWORK_CMAKE_MODULE_PATH)
 if(HAS_SOFAFRAMEWORK_CMAKE_MODULE_PATH EQUAL -1)
     list(APPEND CMAKE_MODULE_PATH ${CMAKE_CURRENT_LIST_DIR})
 endif()
 
+list(FIND CMAKE_PREFIX_PATH "${SOFA_ROOT}/plugins" HAS_PLUGINS_CMAKE_PREFIX_PATH)
+if(HAS_PLUGINS_CMAKE_PREFIX_PATH EQUAL -1)
+    list(APPEND CMAKE_PREFIX_PATH "${CMAKE_CURRENT_LIST_DIR}/../../../plugins")
+endif()
+
+list(APPEND CMAKE_INCLUDE_PATH "${SOFA_ROOT}/include/extlibs/WinDepPack")
+list(APPEND CMAKE_MODULE_PATH "${SOFA_ROOT}/cmake/Modules")
+
 include(SofaMacros)
 
-find_package(TinyXML REQUIRED)
-sofa_create_target(TinyXML SofaFramework "${TinyXML_LIBRARIES}" "${TinyXML_INCLUDE_DIRS}")
-
-set(SOFA_HAVE_ZLIB "TRUE")
-set(SOFA_HAVE_GLEW "TRUE")
-set(SOFA_HAVE_BOOST "1")
-set(SOFA_HAVE_GTEST "1")
-
-set(SOFA_BUILD_METIS "OFF")
+set(SOFAHELPER_HAVE_BOOST "1")
+set(SOFAHELPER_HAVE_BOOST_SYSTEM "1")
+set(SOFAHELPER_HAVE_BOOST_FILESYSTEM "1")
+set(SOFAHELPER_HAVE_BOOST_PROGRAM_OPTIONS "1")
+set(SOFAHELPER_HAVE_BOOST_THREAD "1")
+set(SOFAHELPER_HAVE_OPENGL "1")
+set(SOFAHELPER_HAVE_GLEW "1")
+set(SOFAHELPER_HAVE_GTEST "1")
 
 set(SOFA_NO_OPENGL "OFF")
-
 set(SOFA_USE_MASK "OFF")
 
 set(SOFA_WITH_DEVTOOLS "ON")
 set(SOFA_WITH_THREADING "ON")
 set(SOFA_WITH_DEPRECATED_COMPONENTS "ON")
 
-if(SOFA_HAVE_GTEST)
-    find_package(GTest CONFIG REQUIRED)
+# Find dependencies
+find_package(Boost QUIET REQUIRED system filesystem program_options)
+if(SOFAHELPER_HAVE_BOOST_THREAD)
+    find_package(Boost QUIET REQUIRED thread)
+endif()
+if(SOFAHELPER_HAVE_OPENGL)
+    find_package(OpenGL QUIET REQUIRED)
+endif()
+if(SOFAHELPER_HAVE_GLEW)
+    find_package(GLEW QUIET REQUIRED)
+endif()
+if(SOFAHELPER_HAVE_GTEST)
+    find_package(GTest CONFIG QUIET REQUIRED)
 endif()
 
-if(SOFA_HAVE_ZLIB)
-    find_package(ZLIB REQUIRED)
-    sofa_create_target(ZLIB SofaFramework "${ZLIB_LIBRARIES}" "${ZLIB_INCLUDE_DIRS}")
-endif()
+# Eigen3 is required by SofaDefaultType and SofaHelper
+find_package(Eigen3 QUIET REQUIRED)
 
-if(SOFA_HAVE_GLEW)
-    find_package(GLEW REQUIRED)
-    sofa_create_target(GLEW SofaFramework "${GLEW_LIBRARIES}" "${GLEW_INCLUDE_DIRS}")
-endif()
-
-if(SOFA_HAVE_BOOST)
-    find_package(Boost QUIET REQUIRED COMPONENTS system filesystem locale program_options OPTIONAL_COMPONENTS date_time thread)
-    
-    if(Boost_SYSTEM_FOUND AND Boost_FILESYSTEM_FOUND AND Boost_LOCALE_FOUND AND Boost_PROGRAM_OPTIONS_FOUND)
-        sofa_create_target(BoostSystem SofaFramework "${Boost_SYSTEM_LIBRARY}" "${Boost_INCLUDE_DIRS}")
-        sofa_create_target(BoostFileSystem SofaFramework "${Boost_FILESYSTEM_LIBRARY}" "${Boost_INCLUDE_DIRS}")
-        sofa_create_target(BoostLocale SofaFramework "${Boost_LOCALE_LIBRARY}" "${Boost_INCLUDE_DIRS}")
-        sofa_create_target(BoostProgramOptions SofaFramework "${Boost_PROGRAM_OPTIONS_LIBRARY}" "${Boost_INCLUDE_DIRS}")
+foreach(target SofaHelper SofaDefaultType SofaCore)
+    if(NOT TARGET ${target})
+        include("${CMAKE_CURRENT_LIST_DIR}/SofaFrameworkTargets.cmake")
+        break()
     endif()
-
-    if(Boost_DATE_TIME_FOUND)
-        sofa_create_target(BoostDateTime SofaFramework "${Boost_DATE_TIME_LIBRARY}" "${Boost_INCLUDE_DIRS}")
-    endif()
-
-    if(Boost_THREAD_FOUND)
-        sofa_create_target(BoostThread SofaFramework "${Boost_THREAD_LIBRARY}" "${Boost_INCLUDE_DIRS}")
-    endif()
-endif()
-
-if(NOT TARGET SofaCore)
-	include("${CMAKE_CURRENT_LIST_DIR}/SofaFrameworkTargets.cmake")
-endif()
+endforeach()
 
 check_required_components(SofaHelper SofaDefaultType SofaCore)

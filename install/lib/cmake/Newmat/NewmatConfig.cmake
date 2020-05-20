@@ -31,6 +31,3 @@ if(NOT TARGET newmat)
 endif()
 
 check_required_components(newmat)
-
-set(Newmat_LIBRARIES newmat)
-set(Newmat_INCLUDE_DIRS )

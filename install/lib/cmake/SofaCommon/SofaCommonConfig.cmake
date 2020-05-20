@@ -26,10 +26,25 @@ endmacro()
 
 ####################################################################################
 
-find_package(SofaBase REQUIRED SofaComponentBase)
+set(SOFACOMMON_TARGETS SofaDeformable;SofaEngine;SofaExplicitOdeSolver;SofaImplicitOdeSolver;SofaLoader;SofaMeshCollision;SofaObjectInteraction;SofaRigid;SofaSimpleFem;SofaEigen2Solver)
+set(SOFAEIGEN2SOLVER_HAVE_OPENMP )
 
-if(NOT TARGET SofaComponentCommon)
-	include("${CMAKE_CURRENT_LIST_DIR}/SofaCommonTargets.cmake")
+find_package(SofaBase REQUIRED)
+
+# Eigen3 is required by SofaEigen2Solver and SofaRigid
+find_package(Eigen3 QUIET REQUIRED)
+
+# OpenMP might be required by SofaEigen2Solver
+if (SOFAEIGEN2SOLVER_HAVE_OPENMP AND NOT TARGET OpenMP::OpenMP_CXX)
+    find_package(OpenMP QUIET REQUIRED)
 endif()
 
-check_required_components(SofaComponentCommon;SofaDeformable;SofaEngine;SofaExplicitOdeSolver;SofaImplicitOdeSolver;SofaLoader;SofaMeshCollision;SofaObjectInteraction;SofaRigid;SofaSimpleFem;SofaEigen2Solver)
+
+foreach(target ${SOFACOMMON_TARGETS})
+    if(NOT TARGET ${target})
+        include("${CMAKE_CURRENT_LIST_DIR}/SofaCommonTargets.cmake")
+        break()
+    endif()
+endforeach()
+
+check_required_components(${SOFACOMMON_TARGETS})

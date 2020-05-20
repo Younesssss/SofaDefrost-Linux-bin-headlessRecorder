@@ -1,0 +1,12 @@
+
+--- NEW SESSION: 13/01/2020 17:29:47 ---
+//GenericConstraintSolver.printLog = 1
+/finger/cable/aCableActuator.displacement = 0
+/finger/cable/aCableActuator.color = 1 0.4 0.4 1
+/finger/cable/MechanicalObject.constraint = 0 14 0 0.00236963 -0.0561764 0.000953501  1 0.00503543 -0.0520461 -0.000388883  2 0.00568775 -0.0396173 0.00184321  3 -0.0029189 0.0189285 0.00069111  4 0.0467487 0.0441331 0.316447  5 0.241098 0.0296585 0.391084  6 0.700561 0.0744363 0.291057  7 0.701181 0.0707763 -0.289766  8 0.242677 0.0255748 -0.39195  9 0.0470499 0.0423114 -0.318886  10 -0.00283354 0.018294 0.00034606  11 0.00575981 -0.0400967 -0.000423121  12 0.00504158 -0.0522794 0.00229234  13 -0.997557 -0.0698367 -0.00159817  
+
+/finger/cable/MechanicalObject.showObject = 1
+/finger/cable/MechanicalObject.showIndices = 1
+
+--- NEW SESSION: 13/01/2020 17:34:05 ---
+//GenericConstraintSolver.printLog = 1

@@ -16,7 +16,7 @@ set(CMAKE_IMPORT_FILE_VERSION 1)
 set(_targetsDefined)
 set(_targetsNotDefined)
 set(_expectedTargets)
-foreach(_expectedTarget SofaSimulationCore SofaSimulationCommon SofaSimulationTree SofaSimulationGraph)
+foreach(_expectedTarget SofaSimulationCommon SofaSimulationTree SofaSimulationGraph)
   list(APPEND _expectedTargets ${_expectedTarget})
   if(NOT TARGET ${_expectedTarget})
     list(APPEND _targetsNotDefined ${_expectedTarget})
@@ -50,17 +50,11 @@ if(_IMPORT_PREFIX STREQUAL "/")
   set(_IMPORT_PREFIX "")
 endif()
 
-# Create imported target SofaSimulationCore
-add_library(SofaSimulationCore SHARED IMPORTED)
-
-set_target_properties(SofaSimulationCore PROPERTIES
-  INTERFACE_LINK_LIBRARIES "SofaCore"
-)
-
 # Create imported target SofaSimulationCommon
 add_library(SofaSimulationCommon SHARED IMPORTED)
 
 set_target_properties(SofaSimulationCommon PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaSimulation"
   INTERFACE_LINK_LIBRARIES "SofaCore;SofaSimulationCore"
 )
 
@@ -68,6 +62,7 @@ set_target_properties(SofaSimulationCommon PROPERTIES
 add_library(SofaSimulationTree SHARED IMPORTED)
 
 set_target_properties(SofaSimulationTree PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaSimulation"
   INTERFACE_LINK_LIBRARIES "SofaSimulationCommon"
 )
 
@@ -75,6 +70,7 @@ set_target_properties(SofaSimulationTree PROPERTIES
 add_library(SofaSimulationGraph SHARED IMPORTED)
 
 set_target_properties(SofaSimulationGraph PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaSimulation"
   INTERFACE_LINK_LIBRARIES "SofaSimulationCommon"
 )
 
@@ -114,7 +110,7 @@ unset(_IMPORT_CHECK_TARGETS)
 # Make sure the targets which have been exported in some other 
 # export set exist.
 unset(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE_targets)
-foreach(_target "SofaCore" )
+foreach(_target "SofaCore" "SofaSimulationCore" )
   if(NOT TARGET "${_target}" )
     set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE_targets "${${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE_targets} ${_target}")
   endif()

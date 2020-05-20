@@ -16,7 +16,7 @@ set(CMAKE_IMPORT_FILE_VERSION 1)
 set(_targetsDefined)
 set(_targetsNotDefined)
 set(_expectedTargets)
-foreach(_expectedTarget SofaBaseCollision SofaBaseLinearSolver SofaBaseMechanics SofaBaseTopology SofaBaseVisual SofaComponentBase)
+foreach(_expectedTarget SofaBaseCollision SofaBaseLinearSolver SofaBaseMechanics SofaBaseTopology SofaBaseVisual SofaBaseUtils SofaBase)
   list(APPEND _expectedTargets ${_expectedTarget})
   if(NOT TARGET ${_expectedTarget})
     list(APPEND _targetsNotDefined ${_expectedTarget})
@@ -54,6 +54,7 @@ endif()
 add_library(SofaBaseCollision SHARED IMPORTED)
 
 set_target_properties(SofaBaseCollision PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaBase"
   INTERFACE_LINK_LIBRARIES "SofaCore;SofaSimulationCommon"
 )
 
@@ -61,6 +62,7 @@ set_target_properties(SofaBaseCollision PROPERTIES
 add_library(SofaBaseLinearSolver SHARED IMPORTED)
 
 set_target_properties(SofaBaseLinearSolver PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaBase"
   INTERFACE_LINK_LIBRARIES "SofaSimulationCommon"
 )
 
@@ -68,6 +70,7 @@ set_target_properties(SofaBaseLinearSolver PROPERTIES
 add_library(SofaBaseMechanics SHARED IMPORTED)
 
 set_target_properties(SofaBaseMechanics PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaBase"
   INTERFACE_LINK_LIBRARIES "SofaBaseTopology"
 )
 
@@ -75,21 +78,32 @@ set_target_properties(SofaBaseMechanics PROPERTIES
 add_library(SofaBaseTopology SHARED IMPORTED)
 
 set_target_properties(SofaBaseTopology PROPERTIES
-  INTERFACE_LINK_LIBRARIES "SofaSimulationCommon"
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaBase"
+  INTERFACE_LINK_LIBRARIES "SofaSimulationCommon;Eigen3::Eigen"
 )
 
 # Create imported target SofaBaseVisual
 add_library(SofaBaseVisual SHARED IMPORTED)
 
 set_target_properties(SofaBaseVisual PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaBase"
   INTERFACE_LINK_LIBRARIES "SofaBaseTopology"
 )
 
-# Create imported target SofaComponentBase
-add_library(SofaComponentBase SHARED IMPORTED)
+# Create imported target SofaBaseUtils
+add_library(SofaBaseUtils SHARED IMPORTED)
 
-set_target_properties(SofaComponentBase PROPERTIES
-  INTERFACE_LINK_LIBRARIES "SofaBaseTopology;SofaBaseMechanics;SofaBaseCollision;SofaBaseLinearSolver;SofaBaseVisual"
+set_target_properties(SofaBaseUtils PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaBase"
+  INTERFACE_LINK_LIBRARIES "SofaCore"
+)
+
+# Create imported target SofaBase
+add_library(SofaBase SHARED IMPORTED)
+
+set_target_properties(SofaBase PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaBase"
+  INTERFACE_LINK_LIBRARIES "SofaBaseCollision;SofaBaseLinearSolver;SofaBaseMechanics;SofaBaseTopology;SofaBaseVisual;SofaBaseUtils"
 )
 
 if(CMAKE_VERSION VERSION_LESS 2.8.12)

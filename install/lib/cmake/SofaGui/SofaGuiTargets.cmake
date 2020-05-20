@@ -16,7 +16,7 @@ set(CMAKE_IMPORT_FILE_VERSION 1)
 set(_targetsDefined)
 set(_targetsNotDefined)
 set(_expectedTargets)
-foreach(_expectedTarget SofaGuiCommon SofaHeadlessRecorder SofaGuiQt SofaGuiMain runSofa)
+foreach(_expectedTarget SofaGuiCommon SofaGuiQt SofaHeadlessRecorder SofaGuiMain runSofa)
   list(APPEND _expectedTargets ${_expectedTarget})
   if(NOT TARGET ${_expectedTarget})
     list(APPEND _targetsNotDefined ${_expectedTarget})
@@ -54,29 +54,32 @@ endif()
 add_library(SofaGuiCommon SHARED IMPORTED)
 
 set_target_properties(SofaGuiCommon PROPERTIES
-  INTERFACE_LINK_LIBRARIES "SofaGraphComponent;SofaBaseCollision;SofaUserInteraction;SofaBaseVisual;SofaComponentBase;SofaComponentCommon;SofaComponentGeneral;SofaComponentAdvanced;SofaComponentMisc"
-)
-
-# Create imported target SofaHeadlessRecorder
-add_library(SofaHeadlessRecorder SHARED IMPORTED)
-
-set_target_properties(SofaHeadlessRecorder PROPERTIES
-  INTERFACE_LINK_LIBRARIES "SofaGuiCommon;/usr/lib/x86_64-linux-gnu/libSM.so;/usr/lib/x86_64-linux-gnu/libICE.so;/usr/lib/x86_64-linux-gnu/libX11.so;/usr/lib/x86_64-linux-gnu/libXext.so"
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaGui"
+  INTERFACE_LINK_LIBRARIES "SofaBase;SofaCommon;SofaGeneral;SofaMisc"
 )
 
 # Create imported target SofaGuiQt
 add_library(SofaGuiQt SHARED IMPORTED)
 
 set_target_properties(SofaGuiQt PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "SofaGuiCommon;SofaBaseVisual;SofaLoader;SofaOpenglVisual;SofaMiscForceField;Qt5::Core;Qt5::Widgets;Qt5::OpenGL;QGLViewer"
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaGui"
+  INTERFACE_LINK_LIBRARIES "SofaGuiCommon;SofaBaseVisual;SofaLoader;SofaMiscForceField;Qt5::Core;Qt5::Gui;Qt5::OpenGL;Qt5::WebEngine;Qt5::WebEngineWidgets;QGLViewer"
+)
+
+# Create imported target SofaHeadlessRecorder
+add_library(SofaHeadlessRecorder SHARED IMPORTED)
+
+set_target_properties(SofaHeadlessRecorder PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaGui"
+  INTERFACE_LINK_LIBRARIES "SofaGuiCommon;/usr/lib/x86_64-linux-gnu/libSM.so;/usr/lib/x86_64-linux-gnu/libICE.so;/usr/lib/x86_64-linux-gnu/libX11.so;/usr/lib/x86_64-linux-gnu/libXext.so"
 )
 
 # Create imported target SofaGuiMain
 add_library(SofaGuiMain SHARED IMPORTED)
 
 set_target_properties(SofaGuiMain PROPERTIES
-  INTERFACE_LINK_LIBRARIES "SofaGuiCommon;SofaHeadlessRecorder;SofaGuiQt"
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaGui"
+  INTERFACE_LINK_LIBRARIES "SofaGuiCommon;SofaGuiQt;SofaHeadlessRecorder"
 )
 
 # Create imported target runSofa
@@ -84,6 +87,7 @@ add_executable(runSofa IMPORTED)
 
 set_target_properties(runSofa PROPERTIES
   INTERFACE_COMPILE_DEFINITIONS "CONFIG_PLUGIN_FILENAME=plugin_list.conf;DEFAULT_CONFIG_PLUGIN_FILENAME=plugin_list.conf.default"
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/"
 )
 
 if(CMAKE_VERSION VERSION_LESS 2.8.12)
@@ -122,7 +126,7 @@ unset(_IMPORT_CHECK_TARGETS)
 # Make sure the targets which have been exported in some other 
 # export set exist.
 unset(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE_targets)
-foreach(_target "SofaGraphComponent" "SofaBaseCollision" "SofaUserInteraction" "SofaBaseVisual" "SofaComponentBase" "SofaComponentCommon" "SofaComponentGeneral" "SofaComponentAdvanced" "SofaComponentMisc" "SofaLoader" "SofaOpenglVisual" "SofaMiscForceField" "QGLViewer" )
+foreach(_target "SofaBase" "SofaCommon" "SofaGeneral" "SofaMisc" "SofaBaseVisual" "SofaLoader" "SofaMiscForceField" "QGLViewer" )
   if(NOT TARGET "${_target}" )
     set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE_targets "${${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE_targets} ${_target}")
   endif()

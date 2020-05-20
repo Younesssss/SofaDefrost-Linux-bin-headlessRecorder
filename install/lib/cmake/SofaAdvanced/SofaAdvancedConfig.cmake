@@ -26,16 +26,21 @@ endmacro()
 
 ####################################################################################
 
+set(SOFAADVANCED_TARGETS SofaNonUniformFem)
+
+set(SOFANONUNIFORMFEM_HAVE_SOFADENSESOLVER 1)
+
 find_package(SofaGeneral REQUIRED)
 
-set(SOFA_HAVE_MINIFLOWVR 0)
-
-if(SOFA_HAVE_MINIFLOWVR)
-    find_package(MiniFlowVR REQUIRED)
+if(SOFANONUNIFORMFEM_HAVE_SOFADENSESOLVER)
+    find_package(SofaDenseSolver QUIET REQUIRED)
 endif()
 
-if(NOT TARGET SofaComponentAdvanced)
-	include("${CMAKE_CURRENT_LIST_DIR}/SofaAdvancedTargets.cmake")
-endif()
+foreach(target ${SOFAADVANCED_TARGETS})
+    if(NOT TARGET ${target})
+        include("${CMAKE_CURRENT_LIST_DIR}/SofaAdvancedTargets.cmake")
+        break()
+    endif()
+endforeach()
 
-check_required_components(SofaComponentAdvanced;SofaNonUniformFem)
+check_required_components(${SOFAADVANCED_TARGETS})

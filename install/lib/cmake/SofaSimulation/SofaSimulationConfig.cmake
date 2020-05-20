@@ -26,10 +26,15 @@ endmacro()
 
 ####################################################################################
 
+set(SOFASIMULATION_TARGETS SofaSimulationCommon;SofaSimulationGraph;SofaSimulationTree)
+
 find_package(SofaFramework REQUIRED)
 
-if(NOT TARGET SofaSimulationCommon)
-	include("${CMAKE_CURRENT_LIST_DIR}/SofaSimulationTargets.cmake")
-endif()
+foreach(target ${SOFASIMULATION_TARGETS})
+    if(NOT TARGET ${target})
+        include("${CMAKE_CURRENT_LIST_DIR}/SofaSimulationTargets.cmake")
+        break()
+    endif()
+endforeach()
 
-check_required_components(SofaSimulationCommon;SofaSimulationGraph;SofaSimulationTree)
+check_required_components(${SOFASIMULATION_TARGETS})

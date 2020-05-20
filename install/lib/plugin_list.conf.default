@@ -1,9 +1,14 @@
 
-SofaExporter NO_VERSION
-SofaSparseSolver NO_VERSION
-SofaPreconditioner NO_VERSION
-SofaHaptics NO_VERSION
+SofaExporter 1.0
+SofaSparseSolver 1.0
+SofaPreconditioner 1.0
+SofaHaptics 1.0
+SofaValidation 1.0
+SofaDenseSolver 1.0
+SofaNonUniformFem 1.0
+SofaOpenglVisual 1.0
 SofaPython 0.1
-CImgPlugin NO_VERSION
-SofaMiscCollision NO_VERSION
-SofaAllCommonComponents NO_VERSION
+CImgPlugin 0.1
+SofaMiscCollision 1.0
+SofaDistanceGrid 1.0
+SofaImplicitField 1.0

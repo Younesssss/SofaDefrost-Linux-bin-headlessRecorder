@@ -16,7 +16,7 @@ set(CMAKE_IMPORT_FILE_VERSION 1)
 set(_targetsDefined)
 set(_targetsNotDefined)
 set(_expectedTargets)
-foreach(_expectedTarget SofaHelper SofaDefaultType SofaCore)
+foreach(_expectedTarget SofaHelper SofaDefaultType SofaCore SofaSimulationCore)
   list(APPEND _expectedTargets ${_expectedTarget})
   if(NOT TARGET ${_expectedTarget})
     list(APPEND _targetsNotDefined ${_expectedTarget})
@@ -55,24 +55,37 @@ add_library(SofaHelper SHARED IMPORTED)
 
 set_target_properties(SofaHelper PROPERTIES
   INTERFACE_COMPILE_DEFINITIONS "NDEBUG"
-  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "/usr/lib/x86_64-linux-gnu/libGL.so;/usr/lib/x86_64-linux-gnu/libGLU.so;SofaFramework::GLEW;tinyxml;SofaFramework::ZLIB;SofaFramework::BoostSystem;SofaFramework::BoostFileSystem;SofaFramework::BoostLocale;SofaFramework::BoostProgramOptions;SofaFramework::BoostDateTime;SofaFramework::BoostThread;/usr/lib/x86_64-linux-gnu/libboost_system.so;/usr/lib/x86_64-linux-gnu/libboost_filesystem.so;/usr/lib/x86_64-linux-gnu/libboost_locale.so;/usr/lib/x86_64-linux-gnu/libboost_program_options.so;/usr/lib/x86_64-linux-gnu/libboost_chrono.so;/usr/lib/x86_64-linux-gnu/libboost_atomic.so;/usr/lib/x86_64-linux-gnu/libboost_thread.so;-pthread;/usr/lib/x86_64-linux-gnu/libboost_date_time.so;gtest"
+  INTERFACE_COMPILE_OPTIONS "-DFRAMEWORK_TEST_RESOURCES_DIR=\"/home/younes/travail/sofa/headless/sofa/SofaKernel/SofaFramework/resources/tests\""
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/extlibs/json;${_IMPORT_PREFIX}/include/SofaFramework"
+  INTERFACE_LINK_LIBRARIES "OpenGL::GL;OpenGL::GLU;GLEW::GLEW;Boost::boost;Boost::system;Boost::filesystem;Boost::program_options;Boost::thread;gtest;Eigen3::Eigen"
+  INTERFACE_SYSTEM_INCLUDE_DIRECTORIES "include/extlibs/json"
 )
 
 # Create imported target SofaDefaultType
 add_library(SofaDefaultType SHARED IMPORTED)
 
 set_target_properties(SofaDefaultType PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
-  INTERFACE_LINK_LIBRARIES "SofaHelper"
+  INTERFACE_COMPILE_OPTIONS "-DFRAMEWORK_TEST_RESOURCES_DIR=\"/home/younes/travail/sofa/headless/sofa/SofaKernel/SofaFramework/resources/tests\""
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaFramework"
+  INTERFACE_LINK_LIBRARIES "SofaHelper;Eigen3::Eigen"
 )
 
 # Create imported target SofaCore
 add_library(SofaCore SHARED IMPORTED)
 
 set_target_properties(SofaCore PROPERTIES
-  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_COMPILE_OPTIONS "-DFRAMEWORK_TEST_RESOURCES_DIR=\"/home/younes/travail/sofa/headless/sofa/SofaKernel/SofaFramework/resources/tests\""
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaFramework"
   INTERFACE_LINK_LIBRARIES "SofaHelper;SofaDefaultType"
+)
+
+# Create imported target SofaSimulationCore
+add_library(SofaSimulationCore SHARED IMPORTED)
+
+set_target_properties(SofaSimulationCore PROPERTIES
+  INTERFACE_COMPILE_OPTIONS "-DFRAMEWORK_TEST_RESOURCES_DIR=\"/home/younes/travail/sofa/headless/sofa/SofaKernel/SofaFramework/resources/tests\""
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaFramework"
+  INTERFACE_LINK_LIBRARIES "SofaCore"
 )
 
 if(CMAKE_VERSION VERSION_LESS 2.8.12)
@@ -111,7 +124,7 @@ unset(_IMPORT_CHECK_TARGETS)
 # Make sure the targets which have been exported in some other 
 # export set exist.
 unset(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE_targets)
-foreach(_target "tinyxml" "gtest" )
+foreach(_target "gtest" )
   if(NOT TARGET "${_target}" )
     set(${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE_targets "${${CMAKE_FIND_PACKAGE_NAME}_NOT_FOUND_MESSAGE_targets} ${_target}")
   endif()

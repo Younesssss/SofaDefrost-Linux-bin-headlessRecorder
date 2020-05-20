@@ -16,7 +16,7 @@ set(CMAKE_IMPORT_FILE_VERSION 1)
 set(_targetsDefined)
 set(_targetsNotDefined)
 set(_expectedTargets)
-foreach(_expectedTarget SofaComponentCommon SofaDeformable SofaEngine SofaExplicitOdeSolver SofaImplicitOdeSolver SofaLoader SofaMeshCollision SofaObjectInteraction SofaRigid SofaSimpleFem SofaEigen2Solver)
+foreach(_expectedTarget SofaDeformable SofaEngine SofaExplicitOdeSolver SofaImplicitOdeSolver SofaLoader SofaMeshCollision SofaObjectInteraction SofaRigid SofaSimpleFem SofaEigen2Solver SofaCommon)
   list(APPEND _expectedTargets ${_expectedTarget})
   if(NOT TARGET ${_expectedTarget})
     list(APPEND _targetsNotDefined ${_expectedTarget})
@@ -50,17 +50,11 @@ if(_IMPORT_PREFIX STREQUAL "/")
   set(_IMPORT_PREFIX "")
 endif()
 
-# Create imported target SofaComponentCommon
-add_library(SofaComponentCommon SHARED IMPORTED)
-
-set_target_properties(SofaComponentCommon PROPERTIES
-  INTERFACE_LINK_LIBRARIES "SofaEngine;SofaEigen2Solver;SofaDeformable;SofaExplicitOdeSolver;SofaImplicitOdeSolver;SofaLoader;SofaMeshCollision;SofaObjectInteraction;SofaRigid;SofaSimpleFem"
-)
-
 # Create imported target SofaDeformable
 add_library(SofaDeformable SHARED IMPORTED)
 
 set_target_properties(SofaDeformable PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaCommon"
   INTERFACE_LINK_LIBRARIES "SofaBaseTopology"
 )
 
@@ -68,6 +62,7 @@ set_target_properties(SofaDeformable PROPERTIES
 add_library(SofaEngine SHARED IMPORTED)
 
 set_target_properties(SofaEngine PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaCommon"
   INTERFACE_LINK_LIBRARIES "SofaHelper;SofaCore;SofaDefaultType;SofaSimulationCommon"
 )
 
@@ -75,6 +70,7 @@ set_target_properties(SofaEngine PROPERTIES
 add_library(SofaExplicitOdeSolver SHARED IMPORTED)
 
 set_target_properties(SofaExplicitOdeSolver PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaCommon"
   INTERFACE_LINK_LIBRARIES "SofaSimulationTree"
 )
 
@@ -82,6 +78,7 @@ set_target_properties(SofaExplicitOdeSolver PROPERTIES
 add_library(SofaImplicitOdeSolver SHARED IMPORTED)
 
 set_target_properties(SofaImplicitOdeSolver PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaCommon"
   INTERFACE_LINK_LIBRARIES "SofaSimulationTree"
 )
 
@@ -89,6 +86,7 @@ set_target_properties(SofaImplicitOdeSolver PROPERTIES
 add_library(SofaLoader SHARED IMPORTED)
 
 set_target_properties(SofaLoader PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaCommon"
   INTERFACE_LINK_LIBRARIES "SofaSimulationTree;SofaHelper"
 )
 
@@ -96,6 +94,7 @@ set_target_properties(SofaLoader PROPERTIES
 add_library(SofaMeshCollision SHARED IMPORTED)
 
 set_target_properties(SofaMeshCollision PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaCommon"
   INTERFACE_LINK_LIBRARIES "SofaObjectInteraction;SofaRigid;SofaBaseCollision"
 )
 
@@ -103,6 +102,7 @@ set_target_properties(SofaMeshCollision PROPERTIES
 add_library(SofaObjectInteraction SHARED IMPORTED)
 
 set_target_properties(SofaObjectInteraction PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaCommon"
   INTERFACE_LINK_LIBRARIES "SofaDeformable"
 )
 
@@ -110,13 +110,15 @@ set_target_properties(SofaObjectInteraction PROPERTIES
 add_library(SofaRigid SHARED IMPORTED)
 
 set_target_properties(SofaRigid PROPERTIES
-  INTERFACE_LINK_LIBRARIES "SofaBaseMechanics"
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaCommon"
+  INTERFACE_LINK_LIBRARIES "SofaBaseMechanics;Eigen3::Eigen"
 )
 
 # Create imported target SofaSimpleFem
 add_library(SofaSimpleFem SHARED IMPORTED)
 
 set_target_properties(SofaSimpleFem PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaCommon"
   INTERFACE_LINK_LIBRARIES "SofaBaseTopology"
 )
 
@@ -124,7 +126,16 @@ set_target_properties(SofaSimpleFem PROPERTIES
 add_library(SofaEigen2Solver SHARED IMPORTED)
 
 set_target_properties(SofaEigen2Solver PROPERTIES
-  INTERFACE_LINK_LIBRARIES "SofaBaseLinearSolver"
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaCommon"
+  INTERFACE_LINK_LIBRARIES "SofaBaseLinearSolver;Eigen3::Eigen"
+)
+
+# Create imported target SofaCommon
+add_library(SofaCommon SHARED IMPORTED)
+
+set_target_properties(SofaCommon PROPERTIES
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/SofaCommon"
+  INTERFACE_LINK_LIBRARIES "SofaDeformable;SofaEngine;SofaExplicitOdeSolver;SofaImplicitOdeSolver;SofaLoader;SofaMeshCollision;SofaObjectInteraction;SofaRigid;SofaSimpleFem;SofaEigen2Solver"
 )
 
 if(CMAKE_VERSION VERSION_LESS 2.8.12)

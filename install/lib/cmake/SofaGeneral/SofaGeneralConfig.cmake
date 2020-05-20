@@ -26,17 +26,21 @@ endmacro()
 
 ####################################################################################
 
+set(SOFAGENERAL_TARGETS SofaGeneralAnimationLoop;SofaGeneralDeformable;SofaGeneralExplicitOdeSolver;SofaGeneralImplicitOdeSolver;SofaGeneralLinearSolver;SofaGeneralLoader;SofaGeneralMeshCollision;SofaGeneralObjectInteraction;SofaGeneralRigid;SofaGeneralSimpleFem;SofaGeneralTopology;SofaGeneralVisual;SofaBoundaryCondition;SofaConstraint;SofaGeneralEngine;SofaGraphComponent;SofaTopologyMapping;SofaUserInteraction)
+
+set(SOFAGENERALLOADER_HAVE_ZLIB 1)
+
 find_package(SofaCommon REQUIRED)
 
-set(SOFA_HAVE_NEWMAT 1)
-set(SOFA_HAVE_PARDISO )
-
-if(SOFA_HAVE_NEWMAT)
-    find_package(Newmat REQUIRED)
+if(SOFAGENERALLOADER_HAVE_ZLIB)
+    find_package(ZLIB QUIET REQUIRED)
 endif()
 
-if(NOT TARGET SofaComponentGeneral)
-	include("${CMAKE_CURRENT_LIST_DIR}/SofaGeneralTargets.cmake")
-endif()
+foreach(target ${SOFAGENERAL_TARGETS})
+    if(NOT TARGET ${target})
+        include("${CMAKE_CURRENT_LIST_DIR}/SofaGeneralTargets.cmake")
+        break()
+    endif()
+endforeach()
 
-check_required_components(SofaGeneralAnimationLoop;SofaGeneralDeformable;SofaGeneralExplicitOdeSolver;SofaGeneralImplicitOdeSolver;SofaGeneralLinearSolver;SofaGeneralLoader;SofaGeneralMeshCollision;SofaGeneralObjectInteraction;SofaGeneralRigid;SofaGeneralSimpleFem;SofaGeneralTopology;SofaGeneralVisual;SofaBoundaryCondition;SofaComponentGeneral;SofaConstraint;SofaGeneralEngine;SofaGraphComponent;SofaTopologyMapping;SofaUserInteraction;SofaValidation;SofaDenseSolver;SofaOpenglVisual)
+check_required_components(${SOFAGENERAL_TARGETS})

@@ -55,7 +55,7 @@ add_library(newmat STATIC IMPORTED)
 
 set_target_properties(newmat PROPERTIES
   INTERFACE_COMPILE_DEFINITIONS "use_namespace;USING_DOUBLE"
-  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include"
+  INTERFACE_INCLUDE_DIRECTORIES "${_IMPORT_PREFIX}/include/extlibs/Newmat"
 )
 
 # Load information for each installed configuration.

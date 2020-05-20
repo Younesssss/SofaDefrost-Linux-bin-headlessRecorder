@@ -31,6 +31,3 @@ if(NOT TARGET tinyxml)
 endif()
 
 check_required_components(tinyxml)
-
-set(TinyXML_LIBRARIES tinyxml)
-set(TinyXML_INCLUDE_DIRS )
